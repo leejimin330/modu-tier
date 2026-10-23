@@ -1,0 +1,31 @@
+.form {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.done {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.wrap {
+  position: relative;
+}
+
+.popover {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 10;
+  width: min(340px, calc(100vw - 32px));
+  padding: 14px;
+  box-shadow: 4px 4px 0 var(--ink);
+}

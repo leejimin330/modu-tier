@@ -1,0 +1,15 @@
+.ad {
+  display: block;
+  margin: 32px 0;
+}
+
+.placeholder {
+  display: grid;
+  place-items: center;
+  height: 90px;
+  margin: 32px 0;
+  border: 2px dashed var(--line);
+  border-radius: var(--radius);
+  color: var(--muted);
+  font-size: 13px;
+}

@@ -1,0 +1,13 @@
+.footer {
+  margin-top: 64px;
+  padding: 24px 0 40px;
+  border-top: 2px solid var(--ink);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.footer p {
+  margin: 0 0 6px;
+  max-width: 70ch;
+}

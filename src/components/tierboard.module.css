@@ -1,0 +1,121 @@
+/* 종합 티어 보드와 내 티어 편집기가 함께 쓰는 줄 모양 */
+
+.board {
+  display: grid;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: 5px 5px 0 var(--ink);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  min-height: 104px;
+}
+
+.row + .row {
+  border-top: 2px solid var(--ink);
+}
+
+.label {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  border-right: 2px solid var(--ink);
+  color: var(--tier-ink);
+  font-size: 44px;
+  line-height: 1;
+}
+
+.label small {
+  font-family: var(--font-body), sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  margin-top: 4px;
+}
+
+.labelNone {
+  background: var(--sunken);
+  color: var(--muted);
+  font-size: 15px;
+  text-align: center;
+  padding: 8px;
+}
+
+.tiles {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 6px;
+  padding: 8px;
+  min-width: 0;
+}
+
+.tile {
+  position: relative;
+  width: 84px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  background: var(--sunken);
+  text-align: left;
+  overflow: hidden;
+}
+
+.tile img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  object-position: top;
+  pointer-events: none;
+  user-select: none;
+}
+
+.name {
+  display: block;
+  padding: 2px 4px 3px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.3;
+  /* 한국어 이름은 두 줄까지 보여주고 넘치면 자른다 */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+.tile:hover {
+  border-color: var(--ink);
+}
+
+.badge {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  min-width: 22px;
+  padding: 0 4px;
+  border: 1.5px solid var(--ink);
+  border-radius: 4px;
+  color: var(--tier-ink);
+  font-size: 12px;
+  font-weight: 800;
+  text-align: center;
+}
+
+@media (max-width: 560px) {
+  .row {
+    grid-template-columns: 56px 1fr;
+    min-height: 92px;
+  }
+
+  .label {
+    font-size: 32px;
+  }
+
+  .tile {
+    width: 68px;
+  }
+}

@@ -1,0 +1,87 @@
+.match {
+  margin: 0 0 24px;
+  padding: 20px 22px;
+  box-shadow: 5px 5px 0 var(--ink);
+}
+
+.match p {
+  margin: 0;
+}
+
+.rate {
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.rate b {
+  font-size: 44px;
+  font-weight: 400;
+  color: var(--primary);
+}
+
+.comment {
+  margin: 2px 0 6px !important;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.diffTitle {
+  margin: 18px 0 8px;
+  font-size: 15px;
+}
+
+.diffs {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.diffs li {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.diffs .diffThumb {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--ink);
+  object-fit: cover;
+  object-position: top;
+}
+
+.diffName {
+  font-weight: 800;
+  min-width: 7em;
+}
+
+.diffTiers {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.chip {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  color: var(--tier-ink);
+  font-size: 17px;
+}
+
+.share {
+  margin: 24px 0 0;
+}
+
+.shareTitle {
+  margin: 0 0 10px;
+  font-size: 16px;
+}

@@ -1,0 +1,99 @@
+.notice {
+  margin: 0 0 12px;
+  padding: 10px 14px;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-sm);
+  background: var(--tier-B);
+  color: var(--tier-ink);
+  font-weight: 700;
+}
+
+.labelButton {
+  border-top: 0;
+  border-bottom: 0;
+  border-left: 0;
+  padding: 0;
+  font-family: var(--font-display), sans-serif;
+}
+
+.labelButton:disabled {
+  cursor: default;
+}
+
+/* 캐릭터를 고른 상태에서는 티어 줄이 놓을 수 있는 곳임을 보여준다 */
+.target .labelButton {
+  cursor: pointer;
+}
+
+.target .labelButton:hover {
+  filter: brightness(1.08);
+}
+
+.target > div:last-child {
+  cursor: copy;
+  background: repeating-linear-gradient(-45deg, transparent 0 8px, var(--sunken) 8px 16px);
+}
+
+.selected {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary);
+}
+
+.poolWrap {
+  margin-top: 24px;
+}
+
+.poolTitle {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+
+.pool {
+  min-height: 120px;
+  border: 2px dashed var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.pool p {
+  margin: auto;
+}
+
+.bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 20px;
+  padding: 12px 16px;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: var(--surface);
+}
+
+.bar p {
+  margin: 0;
+}
+
+.barActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+}
+
+.login {
+  margin-top: 16px;
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+}
+
+.login p {
+  margin: 0;
+}

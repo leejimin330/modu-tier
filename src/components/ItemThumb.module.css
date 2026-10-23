@@ -1,0 +1,35 @@
+.box {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: hsl(var(--hue) 85% 86%);
+  color: #16171d;
+  overflow: hidden;
+  container-type: inline-size;
+  pointer-events: none;
+  user-select: none;
+}
+
+.emoji {
+  font-size: 52cqi;
+  line-height: 1;
+}
+
+.text {
+  padding: 6%;
+  font-family: var(--font-display), sans-serif;
+  font-size: 19cqi;
+  line-height: 1.15;
+  text-align: center;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.text[data-len="mid"] {
+  font-size: 15cqi;
+}
+
+.text[data-len="long"] {
+  font-size: 13cqi;
+}

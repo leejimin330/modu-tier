@@ -1,0 +1,61 @@
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 36px 0 24px;
+}
+
+.category {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.title {
+  margin: 0 0 8px;
+  font-size: clamp(30px, 5vw, 46px);
+}
+
+.desc {
+  margin: 0 0 8px;
+  max-width: 60ch;
+}
+
+.meta {
+  margin: 0;
+  color: var(--muted);
+}
+
+.meta b {
+  color: var(--ink);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+}
+
+.actions :global(.btn) {
+  white-space: nowrap;
+}
+
+.empty {
+  padding: 32px 20px;
+  text-align: center;
+}
+
+.how {
+  margin: 20px 0 0;
+  max-width: 70ch;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.share {
+  margin: 20px 0 0;
+}

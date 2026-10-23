@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 티어잇
 
-## Getting Started
+> 공식이 뭘 알아? 우리가 곧 공식이야.
 
-First, run the development server:
+여러 사람이 매긴 티어를 모아 종합 티어를 만드는 사이트. 애니 캐릭터 강함 티어리스트, 여자·남자 캐릭터 외모 티어리스트 등.
+
+## 로컬에서 실행
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`.env.local`에 Supabase 키가 없으면 **로컬 개발 모드**로 동작한다.
+- 로그인은 "개발용 계정"으로 하고, 개발용 계정은 관리자다.
+- 데이터는 `.data/dev-db.json`, 직접 올린 이미지는 `.data/uploads/`에 저장된다.
+- 여러 사람이 투표하는 상황은 쿠키를 지우고(로그아웃) 다시 개발용 계정으로 들어가면 새 사용자로 시험할 수 있다.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 주제 만들기 (관리자)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. `/admin`에서 제목, 영문 주소(예: `jjk-power`), 분류(예: 강함 티어리스트)를 적고 만든다.
+2. AniList에서 작품을 영어나 일본어로 검색하고 캐릭터를 고른다. 주연은 미리 골라져 있다. 이름 칸을 한국어로 고친 뒤 추가한다.
+3. AniList에 없는 캐릭터는 "직접 올리기"로 추가한다.
 
-## Learn More
+기본 주제(애니 43개 작품의 주제 81개 + 음식·브랜드·아이돌·생활 주제 20개)는 `npm run seed`로 넣는다. 분류는 강함 / 여자 캐릭터 외모 / 남자 캐릭터 외모 / 음식 / 브랜드 / 아이돌 / 생활 티어리스트. `.env.local`에 Supabase 키가 있으면 운영 DB에, 없으면 로컬 파일 DB에 들어간다. 여러 번 돌려도 제목·설명·분류를 맞추고 빠진 캐릭터만 채운다. 애니 목록은 `scripts/seed-data.ts`, 이미지 없는 주제는 `scripts/seed-custom.ts`에 있다. 작품을 추가할 때는 거기에 AniList 캐릭터 id와 한국어 이름을 적는다. 외모 티어리스트에는 어린아이 캐릭터를 넣지 않는다. 실존 인물 사진은 초상권 때문에 쓰지 않는다 (아이돌은 그룹 이름 글자 칸).
 
-To learn more about Next.js, take a look at the following resources:
+이미지 없는 항목은 이모지나 이름 글자 칸으로 보인다. 관리자 페이지의 "글자·이모지 항목 넣기"에서 `이름 | 이모지` 형식으로 여러 개를 한 번에 넣을 수 있다. Supabase를 쓰면 `supabase/migrations/0002_text_items.sql`도 실행해야 한다.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+신고는 `/admin/reports`에서 "주제 숨기기·캐릭터 빼기" 또는 "기각"으로 처리한다.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 종합 티어 계산
 
-## Deploy on Vercel
+S=5, A=4, B=3, C=2, D=1점. 캐릭터 점수 = `(표 점수 합 + 3 × 주제 전체 평균) / (표 수 + 3)`.
+표가 적으면 전체 평균 쪽으로 당겨진다. 컷: S ≥ 4.5, A ≥ 3.5, B ≥ 2.5, C ≥ 1.5, 그 외 D.
+로그인한 사람의 표만 반영된다. 비로그인으로 매긴 티어는 브라우저에 임시 저장됐다가 로그인 후 제출할 수 있다.
+코드는 `src/lib/aggregate.ts`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 공유
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- 주제 페이지: 공유하기(휴대폰 공유 창), 링크 복사, 카카오톡, X, 이미지 저장. 링크 미리보기에는 종합 티어표 그림이 뜬다 (`opengraph-image.tsx`).
+- 내 티어 공유: `/t/<주제>/s/<코드>`. 코드에 티어 배치가 담겨 있어 서버에 저장하지 않고, 비로그인도 만들 수 있다 (`src/lib/share-code.ts`). 이 페이지는 종합 티어와의 일치율과 가장 다르게 본 캐릭터를 보여준다.
+- 카카오톡 버튼은 `NEXT_PUBLIC_KAKAO_JS_KEY`가 있을 때만 나온다. 카카오 개발자 콘솔에서 사이트 도메인을 등록해야 한다.
+- 미리보기 그림의 절대 주소에 `NEXT_PUBLIC_SITE_URL`을 쓴다. 배포 도메인으로 꼭 채운다.
+
+## 배포 (Supabase + Vercel)
+
+1. Supabase 프로젝트를 만들고 SQL Editor에서 `supabase/migrations/0001_init.sql`을 실행한다 (업로드용 `uploads` 버킷도 만들어진다).
+2. Authentication → Providers에서 카카오·구글을 켜고, Redirect URL에 `https://<도메인>/auth/callback`을 넣는다.
+3. Vercel 환경변수에 `.env.example`의 값을 채운다. 처음 로그인한 뒤 Supabase `auth.users`에서 내 id를 찾아 `ADMIN_USER_IDS`에 넣는다.
+4. 광고는 애드센스 승인 후 `NEXT_PUBLIC_ADSENSE_CLIENT`와 슬롯 id를 넣으면 나온다.
+
+## AniList 이용 조건
+
+- 월 매출 $150 미만은 상업 이용도 무료. 넘으면 contact@anilist.co로 라이선스 문의.
+- 대량 수집 금지. 관리자가 주제를 만들 때 필요한 캐릭터만 조회한다.
+- 사이트 이름에 "AniList"를 쓰지 않는다.
+- 캐릭터 이미지 저작권은 원작 권리자에게 있다. 푸터에 출처를 밝히고, 권리자 요청은 신고 기능으로 받아 내린다.
+
+## 명령어
+
+| 명령 | 설명 |
+|---|---|
+| `npm run dev` | 개발 서버 |
+| `npm test` | 집계·검증 단위 테스트 |
+| `npm run typecheck` | 타입 검사 |
+| `npm run lint` | ESLint |
+| `npm run build` | 운영 빌드 |
+| `npm run seed` | 기본 주제 넣기 |
