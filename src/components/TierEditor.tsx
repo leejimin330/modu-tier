@@ -9,6 +9,8 @@ import { itemWords } from "@/lib/words";
 import { TIERS, isTier, type Tier } from "@/lib/tiers";
 import type { Character } from "@/lib/types";
 import { ItemThumb, hasLabelInside } from "./ItemThumb";
+import { YouTubePlayer } from "./YouTubePlayer";
+import { youtubeId } from "@/lib/youtube";
 import board from "./tierboard.module.css";
 import styles from "./TierEditor.module.css";
 
@@ -47,6 +49,7 @@ export function TierEditor({ topicId, slug, items, initialVotes, loggedIn }: Pro
   const router = useRouter();
   const [assign, setAssign] = useState<Assign>(initialVotes);
   const [selected, setSelected] = useState<string | null>(null);
+  const [playing, setPlaying] = useState<Character | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [needLogin, setNeedLogin] = useState(false);
@@ -106,7 +109,11 @@ export function TierEditor({ topicId, slug, items, initialVotes, loggedIn }: Pro
         e.dataTransfer.setData("text/plain", c.id);
         e.dataTransfer.effectAllowed = "move";
       }}
-      onClick={() => setSelected((s) => (s === c.id ? null : c.id))}
+      onClick={() => {
+        setSelected((s) => (s === c.id ? null : c.id));
+        // 노래는 고르면 바로 들어볼 수 있게 한다. 티어에 놓아도 계속 재생된다
+        if (youtubeId(c.source_url)) setPlaying(c);
+      }}
     >
       <ItemThumb item={c} />
       {hasLabelInside(c) ? <span className="sr-only">{c.name}</span> : <span className={board.name}>{c.name}</span>}
@@ -114,6 +121,7 @@ export function TierEditor({ topicId, slug, items, initialVotes, loggedIn }: Pro
   );
 
   const w = itemWords(items);
+  const playingId = youtubeId(playing?.source_url);
   const pool = items.filter((c) => !assign[c.id]);
   const count = items.length - pool.length;
 
@@ -139,6 +147,20 @@ export function TierEditor({ topicId, slug, items, initialVotes, loggedIn }: Pro
   return (
     <div>
       {notice && <p className={styles.notice}>{notice}</p>}
+      {w.noun === "노래" && !playing && <p className="muted">노래를 누르면 바로 들어볼 수 있어요.</p>}
+      {playing && playingId && (
+        <aside className={`panel ${styles.player}`} aria-label="지금 듣는 노래">
+          <div className={styles.playerHead}>
+            <p>
+              <b>{playing.name}</b> <span className="muted">{playing.series}</span>
+            </p>
+            <button type="button" className="btn btn-small btn-plain" onClick={() => setPlaying(null)}>
+              닫기
+            </button>
+          </div>
+          <YouTubePlayer key={playingId} id={playingId} title={playing.name} autoplay />
+        </aside>
+      )}
 
       <div className={board.board}>
         {TIERS.map((t) => (

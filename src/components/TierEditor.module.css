@@ -97,3 +97,39 @@
 .login p {
   margin: 0;
 }
+
+/* 노래 주제: 고른 노래를 화면 구석에 띄워서 티어를 매기면서 들을 수 있게 한다 */
+.player {
+  position: fixed;
+  right: 16px;
+  bottom: 104px; /* 아래에 붙는 반영 버튼 줄을 가리지 않게 */
+  z-index: 20;
+  width: min(340px, calc(100vw - 32px));
+  padding: 10px;
+}
+
+.playerHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.playerHead p {
+  margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+}
+
+@media (max-width: 560px) {
+  .player {
+    top: 8px;
+    right: 8px;
+    bottom: auto;
+    width: min(240px, calc(100vw - 16px));
+  }
+}

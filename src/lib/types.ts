@@ -19,7 +19,8 @@ export interface TopicSummary extends Topic {
   participants: number;
   item_count: number;
   /** 미리보기 (주제에 추가된 순서로 최대 4개) */
-  preview: Thumb[];
+  /** source_url은 노래 주제("노래 N곡")를 알아보는 데 쓴다 */
+  preview: (Thumb & Pick<Character, "source_url">)[];
 }
 
 /** anilist·upload는 이미지, text는 이모지나 이름 글자로 보여준다 */

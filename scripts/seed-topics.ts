@@ -5,6 +5,7 @@ import { CUSTOM_TOPICS } from "./seed-custom";
 import { TOPICS } from "./seed-data";
 import { CROSSOVER_TOPICS } from "./seed-crossover";
 import { MEDIA_TOPICS } from "./seed-media";
+import { SONG_TOPICS } from "./seed-songs";
 
 interface AnilistChar {
   id: number;
@@ -162,6 +163,27 @@ async function main() {
         })),
     );
     if (added) console.log(`${t.title}: 항목 ${added}개 추가`);
+  }
+
+  // 노래: 이름 글자 칸에 유튜브 링크를 붙여 상세 창·편집 화면에서 바로 들을 수 있게 한다
+  for (const t of SONG_TOPICS) {
+    const topic = await upsertTopic(t);
+    const have = new Set((await existing(store, topic.id)).map((c) => c.name));
+    const added = await store.addItems(
+      topic.id,
+      t.songs
+        .filter(([name]) => !have.has(name))
+        .map(([name, artist, videoId]) => ({
+          name,
+          series: artist,
+          image_url: "",
+          emoji: null,
+          source: "text" as const,
+          anilist_id: null,
+          source_url: `https://www.youtube.com/watch?v=${videoId}`,
+        })),
+    );
+    if (added) console.log(`${t.title}: 노래 ${added}곡 추가`);
   }
 }
 

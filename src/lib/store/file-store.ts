@@ -82,7 +82,7 @@ export const fileStore: Store = {
             ...t,
             participants: participants(db, t.id),
             item_count: items.length,
-            preview: items.slice(0, 4).map(({ name, image_url, emoji }) => ({ name, image_url, emoji })),
+            preview: items.slice(0, 4).map(({ name, image_url, emoji, source_url }) => ({ name, image_url, emoji, source_url })),
           };
         }),
     ),

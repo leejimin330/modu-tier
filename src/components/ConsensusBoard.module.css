@@ -122,6 +122,10 @@
   font-size: 14px;
 }
 
+.video {
+  grid-column: 1 / -1;
+}
+
 .close {
   margin-top: 16px;
   float: right;

@@ -7,6 +7,8 @@ import type { Character } from "@/lib/types";
 import { itemWords, type ItemWords } from "@/lib/words";
 import { ReportForm } from "./ReportButton";
 import { ItemThumb, hasLabelInside } from "./ItemThumb";
+import { YouTubePlayer } from "./YouTubePlayer";
+import { sourceLabel, youtubeId } from "@/lib/youtube";
 import board from "./tierboard.module.css";
 import styles from "./ConsensusBoard.module.css";
 
@@ -83,6 +85,7 @@ export function ConsensusBoard({ topicId, entries, myVotes }: Props) {
 function Detail({ entry, topicId, mine, w }: { entry: BoardEntry; topicId: string; mine?: Tier; w: ItemWords }) {
   const { character: c } = entry;
   const max = Math.max(1, ...TIERS.map((t) => entry.distribution[t]));
+  const video = youtubeId(c.source_url);
 
   return (
     <div className={styles.detail}>
@@ -122,12 +125,17 @@ function Detail({ entry, topicId, mine, w }: { entry: BoardEntry; topicId: strin
         <div className={styles.links}>
           {c.source_url && (
             <a href={c.source_url} target="_blank" rel="noopener noreferrer">
-              출처: AniList
+              {sourceLabel(c.source_url)}
             </a>
           )}
           <ReportForm topicId={topicId} characterId={c.id} label={`${w.noun} 신고·삭제 요청`} />
         </div>
       </div>
+      {video && (
+        <div className={styles.video}>
+          <YouTubePlayer id={video} title={c.name} />
+        </div>
+      )}
     </div>
   );
 }
