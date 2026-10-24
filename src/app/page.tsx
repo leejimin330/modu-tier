@@ -8,6 +8,19 @@ import { itemWords } from "@/lib/words";
 import type { TopicSummary } from "@/lib/types";
 import styles from "./home.module.css";
 
+const SORTS = [
+  { key: "new", label: "최신순" },
+  { key: "popular", label: "인기순" },
+  { key: "name", label: "이름순" },
+] as const;
+type SortKey = (typeof SORTS)[number]["key"];
+
+function sortTopics(list: TopicSummary[], sort: SortKey) {
+  if (sort === "popular") return [...list].sort((a, b) => b.participants - a.participants || a.title.localeCompare(b.title, "ko"));
+  if (sort === "name") return [...list].sort((a, b) => a.title.localeCompare(b.title, "ko"));
+  return list;
+}
+
 function groupByCategory(topics: TopicSummary[]) {
   const groups = new Map<string, TopicSummary[]>();
   for (const t of topics) {
@@ -20,11 +33,14 @@ function groupByCategory(topics: TopicSummary[]) {
   return [...groups].sort(([, a], [, b]) => oldest(a).localeCompare(oldest(b)));
 }
 
-export default async function Home() {
+export default async function Home({ searchParams }: { searchParams: Promise<{ sort?: string }> }) {
   // 로그인 여부와 무관하게 요청마다 최신 집계를 보여준다
   await getCurrentUser();
+  const { sort: sortParam } = await searchParams;
+  const sort: SortKey = SORTS.some((s) => s.key === sortParam) ? (sortParam as SortKey) : "new";
   const topics = await store.listTopics({ includeHidden: false });
-  const groups = groupByCategory(topics);
+  // 분류 순서는 그대로 두고, 분류 안의 주제만 고른 기준으로 정렬한다
+  const groups = groupByCategory(topics).map(([c, list]) => [c, sortTopics(list, sort)] as const);
 
   return (
     <main>
@@ -53,6 +69,19 @@ export default async function Home() {
           <p className={`panel ${styles.empty}`}>아직 열린 주제가 없어요. 곧 첫 티어 주제가 올라옵니다.</p>
         ) : (
           <>
+            <nav className={styles.tabs} aria-label="정렬">
+              {SORTS.map((s) => (
+                <Link
+                  key={s.key}
+                  href={s.key === "new" ? "/" : `/?sort=${s.key}`}
+                  className={`${styles.tab} ${sort === s.key ? styles.tabActive : ""}`}
+                  aria-current={sort === s.key ? "page" : undefined}
+                  scroll={false}
+                >
+                  {s.label}
+                </Link>
+              ))}
+            </nav>
             <nav className={styles.catNav} aria-label="분류">
               {groups.map(([category, list], i) => (
                 <a key={category} href={`#cat-${i}`} className={styles.catChip}>
